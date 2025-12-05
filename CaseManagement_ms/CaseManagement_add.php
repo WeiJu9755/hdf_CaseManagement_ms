@@ -66,6 +66,11 @@ function processform($aFormValues){
 		}
 	}
 	*/
+	if (trim($aFormValues['year']) == "")	{
+		$objResponse->script("jAlert('警示', '請輸入年分', 'red', '', 2000);");
+		return $objResponse;
+		exit;
+	}
 	
 	if (trim($aFormValues['region']) == "")	{
 		$objResponse->script("jAlert('警示', '請選擇區域', 'red', '', 2000);");
@@ -77,7 +82,7 @@ function processform($aFormValues){
 		return $objResponse;
 		exit;
 	}
-
+	$year = trim($aFormValues['year']);
 	$region = trim($aFormValues['region']);
 	$m_region = "M";
 	if ($region == "北部") {
@@ -92,7 +97,7 @@ function processform($aFormValues){
 	//自動編碼 case_id
 	//案件編號：西元年後2碼+H+區域+流水號3碼，ex.24HN001→可否自動編碼
 	//$o_id = substr(date("Y"),-2,2)."H".$m_region;
-	$o_id = substr(date("Y"),-2,2);
+	$o_id = substr($year, -2, 2);
 
 	$mDB = "";
 	$mDB = new MywebDB();
@@ -340,6 +345,7 @@ EOT;
 
 }
 
+$this_year = date('Y');
 
 $show_center=<<<EOT
 $style_css
@@ -357,6 +363,21 @@ $style_css
 						<div class="field_div1">案件編號:</div> 
 						<div class="field_div2 blue02" style="padding-top: 15px;">
 							系統自動產生
+						</div>
+					</div>
+					<div>
+					<div class="field_div1">年度:</div> 
+						<div class="field_div2 pt-3">
+							<input type="number" 
+								class="inputtext" 
+								id="year" 
+								name="year" 
+								min="2000" 
+								max="2099" 
+								step="1" 
+								value="$this_year" 
+								placeholder="請輸入年度" 
+								style="width:100%;max-width:150px;"/>
 						</div>
 					</div>
 					<div>
